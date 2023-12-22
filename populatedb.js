@@ -90,19 +90,19 @@ async function createAlbums() {
     albumCreate(0,
       "To pimp a butterfly",
       "Summary 1",
-      authors[0],
+      artists[0],
       [genres[0]]
     ),
     albumCreate(1,
       "My beautiful dart twisted fantasy",
       "Summary 2",
-      authors[1],
+      artists[1],
       [genres[0]]
     ),
     albumCreate(2,
       "Alone at prom",
       "Summary 3",
-      authors[3],
+      artists[3],
       [genres[1]]
     ),
     
