@@ -34,9 +34,7 @@ async function main() {
   mongoose.connection.close();
 }
 
-// We pass the index to the ...Create functions so that, for example,
-// genre[0] will always be the Fantasy genre, regardless of the order
-// in which the elements of promise.all's argument complete.
+
 async function genreCreate(index, name) {
   const genre = new Genre({ name: name });
   await genre.save();
@@ -53,13 +51,13 @@ async function artistCreate(index,name) {
   console.log(`Added author: ${name}`);
 }
 
-async function albumCreate(index, title, summary, artist, genre) {
+async function albumCreate(index, title, summary, artist, genres) {
   const albumdetail = {
     title: title,
     summary: summary,
     artist:artist
   };
-  if (genre != false) albumdetail.genre = genre;
+  if (genres != false) albumdetail.genres= genres;
 
   const album = new Album(albumdetail);
   await album.save();

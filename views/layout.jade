@@ -1,10 +1,13 @@
 doctype html
 html
   head
-    title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     ul
       li
-        a(href='main') Home 
-    block content
+        a(href='/main') Home 
+      li 
+        a(href='/main/genre') Genre
+      li 
+        a(href='/main/artist') Artist
+    block content 
