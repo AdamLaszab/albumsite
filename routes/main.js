@@ -19,6 +19,8 @@ router.get('/genre',genreController.genre_list);
 router.get('/genre/:id',genreController.genre_detail);
 
 // SEM MUSI IST /add
+router.get('/add',albumController.album_add_get);
+router.post('/add',albumController.album_add_post); 
 router.get('/:id',albumController.album_detail);
 
 
