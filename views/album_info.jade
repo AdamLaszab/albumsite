@@ -1,0 +1,15 @@
+extends layout 
+
+block content 
+    h1 #{title}
+    div
+        h3 Artist: #{artist}
+    div     
+        h3 Genre:
+            ul
+                for genre in genres 
+                    li #{genre.name}
+    div 
+        h4 Summary: 
+            p #{summary}
+    
