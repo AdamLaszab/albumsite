@@ -18,7 +18,7 @@ exports.album_add_get= asyncHandler(async(req,res,next)=>{
     const AllArtists = await Artist.find({},"name").sort({name:1}).exec();
     res.render("album_form",{title:"Album form",errors:undefined,genres:AllGenres,artists:AllArtists,currentAlbum:undefined});
 })
-exports.album_add_post=[body("name","genre name has to be longer than 1 characters").trim().isLength({min:1}).escape(),
+exports.album_add_post=[body("name","album name has to be longer than 1 characters").trim().isLength({min:1}).escape(),
     body("albumSummary","Summary cant be empty").trim().isLength({min:1}).escape()
  ,asyncHandler(async(req,res,next)=>{
     const errors = validationResult(req);
@@ -50,6 +50,17 @@ exports.album_update_get= asyncHandler(async(req,res,next)=>{
     res.render("album_form",{title:"Album update",errors:undefined,genres:AllGenres,artists:AllArtists,currentAlbum:currentAlbum});
 })
 
-exports.album_update_post= asyncHandler(async(req,res,next)=>{
-    res.send("NOT IMPLEMENTED")
-})
+exports.album_update_post=[
+    body("name","album name has to be longer than 1 character").trim().isLength({min:1}).escape(),
+    body("albumSummary","Summary cant be empty").trim().isLength({min:1}).escape(),
+    asyncHandler(async(req,res,next)=>{
+        const errors= validationResult(req);
+        const updateAlbum = new Album({title:req.body.name,summary:req.body.albumSummary,artist:req.body.artist,genres:[req.body.genre],_id:req.params.id});
+        if(errors.isEmpty()){
+            const updatedAlbum = await Album.findByIdAndUpdate(req.params.id, updateAlbum,{new:true});    
+            res.redirect(updatedAlbum.url);
+        }else{
+             res.render("album_form",{title:"Album update",errors:errors});
+        }
+    })
+]
