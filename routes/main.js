@@ -18,6 +18,10 @@ router.post('/genre/add',genreController.genre_add_post);
 router.get('/genre',genreController.genre_list);
 router.get('/genre/:id',genreController.genre_detail);
 
+router.get('/register', function(req, res, next) {
+  res.render("register_form",{title:"Register here",errors:undefined});
+});
+
 // SEM MUSI IST /add
 router.get('/add',albumController.album_add_get);
 router.post('/add',albumController.album_add_post); 

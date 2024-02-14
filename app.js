@@ -3,12 +3,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require("express-session");
+var passport = require("passport");
+var LocalStrategy = require("passport-local").Strategy;
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var mainRouter= require('./routes/main');
 var app = express();
-
+require('dotenv').config();
 // Set up mongoose connection
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false); 
@@ -23,6 +26,9 @@ async function main() {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

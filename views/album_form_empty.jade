@@ -6,28 +6,22 @@ block content
         div 
             div 
                 label(for='name') Title:
-                    input(type='text', name='name',value=currentAlbum.title,required)
+                    input(type='text', name='name',required)
             div
                 label(for='artist') Artist:
                     select(name="artist")
                         for artist in artists                           
-                            if (currentAlbum.artist._id.toString() === artist._id.toString())
-                                option(value=artist._id, selected=true) #{artist.name}
-                            else
                                 option(value=artist._id) #{artist.name}
 
             div
                 lable(for='genre') Genre: 
                     select(name="genre")
                         for genre in genres 
-                            if (currentAlbum.genres[0]._id.toString() === genre._id.toString())
-                                option(value=genre._id,selected=true) #{genre.name}
-                            else 
                                 option(value=genre._id) #{genre.name}
             div   
                 label(for="albumSummary") Album Summary:
                     div
-                        textarea#albumSummary(name="albumSummary", rows="8", cols="40") #{currentAlbum.summary}
+                        textarea#albumSummary(name="albumSummary", rows="8", cols="40")
         div 
 
         button(type='submit') Submit

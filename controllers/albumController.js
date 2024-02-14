@@ -16,7 +16,8 @@ exports.album_detail = asyncHandler(async(req,res,next)=>{
 exports.album_add_get= asyncHandler(async(req,res,next)=>{
     const AllGenres = await Genre.find({},"name").sort({name:1}).exec();
     const AllArtists = await Artist.find({},"name").sort({name:1}).exec();
-    res.render("album_form",{title:"Album form",errors:undefined,genres:AllGenres,artists:AllArtists,currentAlbum:undefined});
+    console.log(AllArtists);
+    res.render("album_form_empty",{title:"Album form",errors:undefined,genres:AllGenres,artists:AllArtists});
 })
 exports.album_add_post=[body("name","album name has to be longer than 1 characters").trim().isLength({min:1}).escape(),
     body("albumSummary","Summary cant be empty").trim().isLength({min:1}).escape()
