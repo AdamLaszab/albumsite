@@ -4,7 +4,7 @@ var router = express.Router();
 const artistController = require("../controllers/artistController");
 const albumController = require("../controllers/albumController");
 const genreController = require("../controllers/genreController");
-
+const usersController = require("../controllers/usersController");
 
 router.get('/',albumController.album_list);
 
@@ -21,6 +21,7 @@ router.get('/genre/:id',genreController.genre_detail);
 router.get('/register', function(req, res, next) {
   res.render("register_form",{title:"Register here",errors:undefined});
 });
+router.post('/register', usersController.user_register);
 
 // SEM MUSI IST /add
 router.get('/add',albumController.album_add_get);
