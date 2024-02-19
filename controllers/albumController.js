@@ -7,17 +7,17 @@ const body = validator.body;
 const validationResult = validator.validationResult;
 exports.album_list = asyncHandler(async(req,res,next)=>{
 const allAlbums = await Album.find({},"title artist summary genres").sort({title:1}).populate("artist genres").exec(); 
-res.render("album_list",{title:"Album list",album_list:allAlbums});
+res.render("album_list",{title:"Album list",album_list:allAlbums,user:req.user});
 })
 exports.album_detail = asyncHandler(async(req,res,next)=>{
     const albumInfo = await Album.findOne({_id:req.params.id}).populate("artist").populate("genres").exec();
-    res.render("album_info",{title:albumInfo.title,summary:albumInfo.summary,artist:albumInfo.artist.name,genres:albumInfo.genres,id:albumInfo._id}); 
+    res.render("album_info",{title:albumInfo.title,summary:albumInfo.summary,artist:albumInfo.artist.name,genres:albumInfo.genres,id:albumInfo._id,user:req.user}); 
 })
 exports.album_add_get= asyncHandler(async(req,res,next)=>{
     const AllGenres = await Genre.find({},"name").sort({name:1}).exec();
     const AllArtists = await Artist.find({},"name").sort({name:1}).exec();
     console.log(AllArtists);
-    res.render("album_form_empty",{title:"Album form",errors:undefined,genres:AllGenres,artists:AllArtists});
+    res.render("album_form_empty",{title:"Album form",errors:undefined,genres:AllGenres,artists:AllArtists,user:req.user});
 })
 exports.album_add_post=[body("name","album name has to be longer than 1 characters").trim().isLength({min:1}).escape(),
     body("albumSummary","Summary cant be empty").trim().isLength({min:1}).escape()
@@ -25,7 +25,7 @@ exports.album_add_post=[body("name","album name has to be longer than 1 characte
     const errors = validationResult(req);
     const newAlbum = new Album({title:req.body.name,summary:req.body.albumSummary,artist:req.body.artist,genres:[req.body.genre]});
     if(!errors.isEmpty()){
-        res.render("album_form",{title:"Album form",errors:errors.array()})
+        res.render("album_form",{title:"Album form",errors:errors.array(),user:req.user})
     }else{
         const albumExists = await Album.findOne({title:req.body.name,summary:req.body.albumSummary,artist:req.body.artist,genres:[req.body.genre]}).collation({locale:"en",strength:2}).exec();
         if(albumExists){
@@ -48,7 +48,7 @@ exports.album_update_get= asyncHandler(async(req,res,next)=>{
         err.status = 404;
         return next(err);
       }
-    res.render("album_form",{title:"Album update",errors:undefined,genres:AllGenres,artists:AllArtists,currentAlbum:currentAlbum});
+    res.render("album_form",{title:"Album update",errors:undefined,genres:AllGenres,artists:AllArtists,currentAlbum:currentAlbum,user:req.user});
 })
 
 exports.album_update_post=[
@@ -61,7 +61,7 @@ exports.album_update_post=[
             const updatedAlbum = await Album.findByIdAndUpdate(req.params.id, updateAlbum,{new:true});    
             res.redirect(updatedAlbum.url);
         }else{
-             res.render("album_form",{title:"Album update",errors:errors});
+             res.render("album_form",{title:"Album update",errors:errors,user:req.user});
         }
     })
 ]

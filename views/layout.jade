@@ -2,7 +2,12 @@ doctype html
 html
   head
     link(rel='stylesheet', href='/stylesheets/style.css')
-  body
+    if (user)
+      div Logged in user: #{user.username}
+    else 
+      div No account is logged in 
+          
+  body 
     ul
       li
         a(href='/main') Home 
@@ -16,4 +21,8 @@ html
         a(href='/main/genre/add') Add a new genre
       li 
         a(href='/main/artist/add') Add a new artist
+      li 
+        a(href='/main/register') Register 
+      li 
+        a(href='/main/login') Login
     block content 

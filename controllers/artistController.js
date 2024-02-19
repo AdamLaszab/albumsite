@@ -7,14 +7,14 @@ const validationResult = validator.validationResult;
 exports.artist_list = asyncHandler(async(req,res,next)=>{
 const AllArtists = await Artist.find({},"name").sort({name:1}).exec();
 
-res.render("artist_list",{all_artists:AllArtists});
+res.render("artist_list",{all_artists:AllArtists,user:req.user});
 })
 exports.artist_detail = asyncHandler(async(req,res,next)=>{
     res.send(`not implemented artist detail ${req.params.id}`);
 })
 
 exports.artist_add_get = function(req,res,next){
-    res.render("artist_form",{title:"Artist add",errors:undefined});
+    res.render("artist_form",{title:"Artist add",errors:undefined,user:req.user});
 }
 exports.artist_add_post = [
     body("name","name has to be longer than 3 characters").trim().isLength({min:3}).escape(),
@@ -24,7 +24,7 @@ exports.artist_add_post = [
     const Artistnew = new Artist({name:req.body.name});
 
     if(!errors.isEmpty()){
-        res.render("artist_form",{title:"Artist add",errors:errors.array()});
+        res.render("artist_form",{title:"Artist add",errors:errors.array(),user:req.user});
     }else{
         const artistExists = await Artist.findOne({name:req.body.name}).collation({locale:"en",strength:2}).exec();
 

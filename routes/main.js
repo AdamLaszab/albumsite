@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+const passport = require("passport");
 const artistController = require("../controllers/artistController");
 const albumController = require("../controllers/albumController");
 const genreController = require("../controllers/genreController");
@@ -19,9 +19,13 @@ router.get('/genre',genreController.genre_list);
 router.get('/genre/:id',genreController.genre_detail);
 
 router.get('/register', function(req, res, next) {
-  res.render("register_form",{title:"Register here",errors:undefined});
+  res.render("register_form",{title:"Register here",errors:undefined,user:req.user});
 });
 router.post('/register', usersController.user_register);
+router.get("/login", function(req,res,next){
+  res.render("register_form",{title:"Login here",errors:undefined,user:req.user});
+})
+router.post("/login",passport.authenticate("local", {successRedirect: "/main",failureRedirect: "/main/login"}));
 
 // SEM MUSI IST /add
 router.get('/add',albumController.album_add_get);
