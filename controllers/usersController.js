@@ -11,16 +11,16 @@ body("password","issue with the password").trim().escape()
     if(!errors.isEmpty()){
         res.render("register_form",{title:"Register here",errors:errors.array(),user:req.user});
     }else{
-        const userExists = await User.findOne({name:req.body.username}).collation({locale:"en",strength:2}).exec();
+        const userExists = await User.findOne({username:req.body.username}).collation({locale:"en",strength:2}).exec(); 
         if(userExists){
-         res.render("register_form",{title:"Register here",errors:["User already exists"],user:req.user});   
+         res.render("register_form",{title:"Register here",errors:[{msg:"User already exists"}],user:req.user});   
         }else{
             bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
         if(err){
             next(err);
         }else{
-            const newUser = new User({username:req.body.username,password:hashedPassword});
-            newUser.save();
+            const newUser = new User({username:req.body.username,password:hashedPassword,admin:false});
+            await newUser.save();
         }
         res.redirect("/");
     });
