@@ -17,6 +17,10 @@ exports.genre_add_get = (req,res,next)=>{
 }
 exports.genre_add_post=[body("name","genre name has to be longer than 3 characters").trim().isLength({min:3}).escape() 
     ,asyncHandler(async(req,res,next)=>{
+        if(req.user){
+        if(req.user.admin !== true){
+            res.render("genre_form",{title:"Genre form",errors:[{msg:"You need to be using an admin account to add new genres"}],user:req.user});
+        }else{
         const errors = validationResult(req);
 
         const newgenre = new Genre({name:req.body.name});
@@ -30,5 +34,8 @@ exports.genre_add_post=[body("name","genre name has to be longer than 3 characte
                 await newgenre.save();
                 res.redirect(newgenre.url);
             }
-        }
+        }}
+    }else{
+        res.render("genre_form",{title:"Genre form",errors:[{msg:"You need to be logged in"}],user:req.user});
+    }
 })]

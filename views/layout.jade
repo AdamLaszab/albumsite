@@ -4,6 +4,8 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
     if (user)
       div Logged in user: #{user.username}
+    else if (user === undefined)
+      div No account is logged in 
     else 
       div No account is logged in 
           

@@ -19,6 +19,11 @@ exports.artist_add_get = function(req,res,next){
 exports.artist_add_post = [
     body("name","name has to be longer than 3 characters").trim().isLength({min:3}).escape(),
     asyncHandler(async(req,res,next)=>{
+    if(req.user){
+    if(req.user.admin !== true){
+    res.render("artist_form",{title:"Genre form",errors:[{msg:"You need to be using an admin account to add new artists"}],user:req.user});
+    }else{
+    
     const errors = validationResult(req);
     
     const Artistnew = new Artist({name:req.body.name});
@@ -35,5 +40,9 @@ exports.artist_add_post = [
             res.redirect(Artistnew.url);
         }
     }
+}
+}else{
+    res.render("artist_form",{title:"Genre form",errors:[{msg:"You need to be logged in"}],user:req.user});
+}
 })
 ] 

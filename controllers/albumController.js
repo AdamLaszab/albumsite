@@ -22,6 +22,11 @@ exports.album_add_get= asyncHandler(async(req,res,next)=>{
 exports.album_add_post=[body("name","album name has to be longer than 1 characters").trim().isLength({min:1}).escape(),
     body("albumSummary","Summary cant be empty").trim().isLength({min:1}).escape()
  ,asyncHandler(async(req,res,next)=>{
+    if(req.user){
+        if(req.user.admin !== true){
+    res.render("album_form",{title:"Album form", errors:[{msg:"You need to be using an admin account to add new albums"}],user:req.user});
+        }else{
+     
     const errors = validationResult(req);
     const newAlbum = new Album({title:req.body.name,summary:req.body.albumSummary,artist:req.body.artist,genres:[req.body.genre]});
     if(!errors.isEmpty()){
@@ -35,6 +40,11 @@ exports.album_add_post=[body("name","album name has to be longer than 1 characte
             res.redirect(newAlbum.url);
         }
     }
+}
+}else{
+    res.render("album_form",{title:"Album form", errors:[{msg:"You need to be logged in"}],user:req.user});
+}
+
 })]
 exports.album_update_get= asyncHandler(async(req,res,next)=>{
     const[currentAlbum,AllGenres,AllArtists]= await Promise.all(
