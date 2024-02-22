@@ -1,1 +1,1 @@
-Site where you can rate albums. Authenticated users can add albums. Uses NodeJS/Express.
+Express CRUD app that uses PassportJS for authenticating users. Connected to a mongo db database.
